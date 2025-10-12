@@ -1,4 +1,4 @@
-** E-Commerce Sales & Advertising Analytics Warehouse**
+**E-Commerce Sales & Advertising Analytics Warehouse**
  
 **Overview**
 
