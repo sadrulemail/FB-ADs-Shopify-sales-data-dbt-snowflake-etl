@@ -1,0 +1,199 @@
+version: 2
+
+models:
+  - name: dim_customer
+    description: Customer dimension table with SCD Type 2 tracking
+    columns:
+      - name: customer_key
+        description: Surrogate key for the customer dimension
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Business key from source system
+        tests:
+          - not_null
+      - name: is_current
+        description: Flag indicating if this is the current record for the customer
+      - name: effective_date
+        description: Date when this customer record became effective
+      - name: expiration_date
+        description: Date when this customer record expired (NULL if current)
+
+  - name: dim_product
+    description: Product dimension table with SCD Type 2 tracking
+    columns:
+      - name: product_key
+        description: Surrogate key for the product dimension
+        tests:
+          - unique
+          - not_null
+      - name: product_id
+        description: Business key from source system
+        tests:
+          - not_null
+      - name: product_name
+        description: Name of the product
+      - name: category
+        description: Product category
+      - name: is_current
+        description: Flag indicating if this is the current record for the product
+      - name: effective_date
+        description: Date when this product record became effective
+      - name: expiration_date
+        description: Date when this product record expired (NULL if current)
+
+  - name: dim_date
+    description: Date dimension table for time-based analysis
+    columns:
+      - name: date_key
+        description: Primary key for the date dimension
+        tests:
+          - unique
+          - not_null
+      - name: full_date
+        description: The actual date value
+        tests:
+          - unique
+          - not_null
+      - name: year_number
+        description: Year component of the date
+      - name: quarter_number
+        description: Quarter of the year (1-4)
+      - name: month_number
+        description: Month of the year (1-12)
+      - name: month_name
+        description: Name of the month
+
+  - name: dim_order_status
+    description: Order status dimension
+    columns:
+      - name: status_key
+        description: Surrogate key for the status dimension
+        tests:
+          - unique
+          - not_null
+      - name: status_id
+        description: Business key for the status
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_payment_method
+    description: Payment method dimension
+    columns:
+      - name: payment_method_key
+        description: Surrogate key for the payment method dimension
+        tests:
+          - unique
+          - not_null
+      - name: payment_method_id
+        description: Business key for the payment method
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_warehouse
+    description: Warehouse location dimension
+    columns:
+      - name: warehouse_key
+        description: Surrogate key for the warehouse dimension
+        tests:
+          - unique
+          - not_null
+      - name: warehouse_id
+        description: Business key for the warehouse
+        tests:
+          - unique
+          - not_null
+  - name: dim_campaign
+    description: Campaign dimension table
+    columns:
+      - name: campaign_key
+        description: Surrogate key for the campaign dimension
+        tests:
+          - unique
+          - not_null
+      - name: campaign_id
+        description: Business key from source system
+        tests:
+          - not_null
+      - name: campaign_name
+        description: Name of the campaign
+      - name: objective
+        description: Campaign objective (e.g., conversions, awareness)
+      - name: status
+        description: Current status of the campaign
+      - name: budget_type
+        description: Type of budget (daily or lifetime)
+      - name: is_current
+        description: Flag indicating if this is the current record for the campaign
+
+  - name: dim_adset
+    description: Ad set dimension table
+    columns:
+      - name: adset_key
+        description: Surrogate key for the ad set dimension
+        tests:
+          - unique
+          - not_null
+      - name: ad_set_id
+        description: Business key from source system
+        tests:
+          - not_null
+      - name: campaign_key
+        description: Foreign key to campaign dimension
+        tests:
+          - not_null
+      - name: ad_set_name
+        description: Name of the ad set
+      - name: targeting_age_min
+        description: Minimum age for targeting
+      - name: targeting_age_max
+        description: Maximum age for targeting
+      - name: targeting_gender
+        description: Gender targeting (e.g., male, female, all)
+      - name: is_current
+        description: Flag indicating if this is the current record for the ad set
+
+  - name: dim_ad
+    description: Ad dimension table
+    columns:
+      - name: ad_key
+        description: Surrogate key for the ad dimension
+        tests:
+          - unique
+          - not_null
+      - name: ad_id
+        description: Business key from source system
+        tests:
+          - not_null
+      - name: adset_key
+        description: Foreign key to ad set dimension
+        tests:
+          - not_null
+      - name: ad_name
+        description: Name of the ad
+      - name: ad_type
+        description: Type of ad (e.g., image, video, carousel)
+      - name: creative_headline
+        description: Headline text for the ad
+      - name: destination_url
+        description: URL where the ad directs users
+      - name: is_current
+        description: Flag indicating if this is the current record for the ad
+
+  - name: dim_status
+    description: Status dimension table
+    columns:
+      - name: status_key
+        description: Surrogate key for the status dimension
+        tests:
+          - unique
+          - not_null
+      - name: status
+        description: Status value
+        tests:
+          - not_null
+      - name: status_description
+        description: Description of the status

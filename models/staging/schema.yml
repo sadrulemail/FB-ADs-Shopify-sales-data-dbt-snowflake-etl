@@ -1,0 +1,116 @@
+version: 2
+
+sources:
+  - name: raw_data
+    database: DEMO_DB
+    schema: RAW_DATA
+    tables:
+      - name: Customers
+      - name: Products
+      - name: Inventory
+      - name: Orders
+      - name: Order_Items
+      - name: Campaigns
+      - name: AdSets
+      - name: Ads
+      - name: Ad_Insights
+      - name: Ad_Spend
+
+models:
+  - name: stg_customers
+    description: Staged customer data
+    columns:
+      - name: customer_id
+        description: Primary key of the customer
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_products
+    description: Staged product data
+    columns:
+      - name: product_id
+        description: Primary key of the product
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_inventory
+    description: Staged inventory data
+    columns:
+      - name: inventory_id
+        description: Primary key of the inventory record
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_orders
+    description: Staged order data
+    columns:
+      - name: order_id
+        description: Primary key of the order
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_order_items
+    description: Staged order item data
+    columns:
+      - name: order_item_id
+        description: Primary key of the order item
+        tests:
+          - unique
+          - not_null
+          
+  - name: stg_campaigns
+    columns:
+      - name: campaign_id
+        tests:
+          - unique
+          - not_null
+  
+  - name: stg_adsets
+    columns:
+      - name: ad_set_id
+        tests:
+          - unique
+          - not_null
+      - name: campaign_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_campaigns')
+              field: campaign_id
+  
+  - name: stg_ads
+    columns:
+      - name: ad_id
+        tests:
+          - unique
+          - not_null
+      - name: ad_set_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_adsets')
+              field: ad_set_id
+  
+  - name: stg_ad_insights
+    columns:
+      - name: performance_id
+        tests:
+          - unique
+          - not_null
+      - name: ad_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_ads')
+              field: ad_id
+  
+  - name: stg_ad_spend
+    columns:
+      - name: spend_id
+        tests:
+          - unique
+          - not_null

@@ -1,0 +1,192 @@
+version: 2
+
+models:
+  - name: fact_sales
+    description: Sales fact table at the order line item level
+    columns:
+      - name: sales_key
+        description: Primary key for the sales fact
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: Order identifier from source system
+        tests:
+          - not_null
+      - name: order_item_id
+        description: Order item identifier from source system
+        tests:
+          - not_null
+      - name: customer_key
+        description: Foreign key to customer dimension
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_key
+      - name: product_key
+        description: Foreign key to product dimension
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_product')
+              field: product_key
+      - name: order_date_key
+        description: Foreign key to date dimension
+        tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+      - name: quantity
+        description: Quantity of product ordered
+      - name: line_item_total
+        description: Total amount for the line item
+
+  - name: fact_inventory
+    description: Inventory fact table
+    columns:
+      - name: inventory_key
+        description: Primary key for the inventory fact
+        tests:
+          - unique
+          - not_null
+      - name: product_key
+        description: Foreign key to product dimension
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_product')
+              field: product_key
+      - name: warehouse_key
+        description: Foreign key to warehouse dimension
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_warehouse')
+              field: warehouse_key
+      - name: quantity_available
+        description: Available quantity in inventory
+      - name: reorder_level
+        description: Level at which product should be reordered
+
+  - name: fact_order_summary
+    description: Order summary fact table at the order level
+    columns:
+      - name: order_summary_key
+        description: Primary key for the order summary fact
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: Order identifier from source system
+        tests:
+          - not_null
+      - name: customer_key
+        description: Foreign key to customer dimension
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_key
+      - name: order_date_key
+        description: Foreign key to date dimension
+        tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+      - name: grand_total
+        description: Total amount of the order
+  - name: fact_ad_performance
+    description: Ad performance metrics fact table
+    columns:
+      - name: ad_performance_key
+        description: Primary key for the ad performance fact
+        tests:
+          - unique
+          - not_null
+      - name: ad_key
+        description: Foreign key to ad dimension
+        tests:
+          - not_null
+      - name: adset_key
+        description: Foreign key to ad set dimension
+        tests:
+          - not_null
+      - name: date_key
+        description: Foreign key to date dimension
+        tests:
+          - not_null
+      - name: impressions
+        description: Number of times the ad was shown
+      - name: clicks
+        description: Number of clicks on the ad
+      - name: ctr
+        description: Click-through rate (clicks/impressions)
+      - name: spend
+        description: Amount spent on the ad
+      - name: conversions
+        description: Number of conversions attributed to the ad
+      - name: conversion_value
+        description: Monetary value of conversions
+      - name: cost_per_conversion
+        description: Average cost per conversion
+      - name: roas
+        description: Return on ad spend (conversion value/spend)
+
+  - name: fact_campaign_spend
+    description: Campaign spend fact table
+    columns:
+      - name: campaign_spend_key
+        description: Primary key for the campaign spend fact
+        tests:
+          - unique
+          - not_null
+      - name: campaign_key
+        description: Foreign key to campaign dimension
+        tests:
+          - not_null
+      - name: adset_key
+        description: Foreign key to ad set dimension
+      - name: date_key
+        description: Foreign key to date dimension
+        tests:
+          - not_null
+      - name: daily_budget
+        description: Budget allocated for the day
+      - name: amount_spent
+        description: Actual amount spent
+      - name: remaining_budget
+        description: Remaining budget for the day
+      - name: budget_utilization_percentage
+        description: Percentage of budget utilized
+
+  - name: fact_adset_performance
+    description: Ad set performance metrics fact table
+    columns:
+      - name: adset_performance_key
+        description: Primary key for the ad set performance fact
+        tests:
+          - unique
+          - not_null
+      - name: adset_key
+        description: Foreign key to ad set dimension
+        tests:
+          - not_null
+      - name: date_key
+        description: Foreign key to date dimension
+        tests:
+          - not_null
+      - name: impressions
+        description: Number of times ads in the ad set were shown
+      - name: clicks
+        description: Number of clicks on ads in the ad set
+      - name: ctr
+        description: Click-through rate for the ad set
+      - name: spend
+        description: Amount spent on the ad set
+      - name: conversions
+        description: Number of conversions attributed to the ad set
+      - name: conversion_rate
+        description: Conversion rate (conversions/clicks)
+      - name: roas
+        description: Return on ad spend for the ad set
