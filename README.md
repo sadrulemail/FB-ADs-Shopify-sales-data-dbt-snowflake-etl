@@ -5,6 +5,7 @@
 This repository hosts the Data Build Tool (dbt) project responsible for transforming raw e-commerce and advertising data into a unified, clean, and analytical data warehouse. The goal is to combine operational metrics (from Shopify) with marketing performance metrics (from Facebook Ads) to accurately calculate key business metrics like Customer Acquisition Cost (CAC), Return on Ad Spend (ROAS), and Lifetime Value (LTV).
 
 **Architecture Flow**
+
 Raw data is ingested via an ETL/ELT process into a cloud data warehouse (e.g., Snowflake, BigQuery) from AWS S3, where DBT models structure and enhance the data for consumption by BI tools.
 
 
